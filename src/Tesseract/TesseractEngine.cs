@@ -18,6 +18,7 @@ namespace Tesseract
         private static readonly TraceSource trace = new TraceSource("Tesseract");
 
         private HandleRef handle;
+        private Monitor monitor;
 
         private int processCount = 0;
 
@@ -196,6 +197,29 @@ namespace Tesseract
             }
         }
 
+        /// <summary>
+        /// Monitor for progress and cancellation
+        /// </summary>
+        public Monitor Monitor
+        {
+            get
+            {
+                if (monitor == null)
+                {
+                    monitor = new Monitor();
+                }
+                return monitor;
+            }
+        }
+
+        internal Monitor MonitorInternal
+        {
+            get
+            {
+                return monitor;
+            }
+        }
+
         internal HandleRef Handle
         {
             get { return handle; }
@@ -356,6 +380,10 @@ namespace Tesseract
             {
                 Interop.TessApi.Native.BaseApiDelete(handle);
                 handle = new HandleRef(this, IntPtr.Zero);
+            }
+            if (disposing)
+            {
+                monitor?.Dispose();
             }
         }
 

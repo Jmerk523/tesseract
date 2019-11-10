@@ -333,7 +333,41 @@ namespace Tesseract.Interop
         int ResultRendererImageNum(HandleRef renderer);
 
         #endregion Renderer API
+
+        #region Monitor API
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorCreate")]
+        IntPtr MonitorCreate();
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorDelete")]
+        void MonitorDelete(HandleRef monitor);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorSetCancelFunc")]
+        void MonitorSetCancelFunc(HandleRef monitor, CancelFunc cancelFunc);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorSetCancelThis")]
+        void MonitorSetCancelThis(HandleRef monitor, IntPtr cancelThis);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorGetCancelThis")]
+        IntPtr MonitorGetCancelThis(HandleRef monitor);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorSetCancelFunc")]
+        void MonitorSetProgressFunc(HandleRef monitor, ProgressFunc progressFunc);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorGetProgress")]
+        int MonitorGetProgress(HandleRef monitor);
+
+        [RuntimeDllImport(Constants.TesseractDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "TessMonitorSetDeadlineMSecs")]
+        void MonitorSetDeadlineMSecs(HandleRef monitor, int deadline);
+
+        #endregion
     }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool CancelFunc(IntPtr cancel_this, int words);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ProgressFunc(IntPtr ths, int left, int right, int top, int bottom);
 
     internal static class TessApi
     {

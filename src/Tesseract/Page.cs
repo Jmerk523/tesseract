@@ -344,7 +344,8 @@ namespace Tesseract
         {
             Guard.Verify(PageSegmentMode != PageSegMode.OsdOnly, "Cannot OCR image when using OSD only page segmentation, please use DetectBestOrientation instead.");
             if (!runRecognitionPhase) {
-                if (Interop.TessApi.Native.BaseApiRecognize(Engine.Handle, new HandleRef(this, IntPtr.Zero)) != 0) {
+                var monitorHandle = Engine.MonitorInternal?.Handle ?? new HandleRef(this, IntPtr.Zero);
+                if (Interop.TessApi.Native.BaseApiRecognize(Engine.Handle, monitorHandle) != 0) {
                     throw new InvalidOperationException("Recognition of image failed.");
                 }
 
