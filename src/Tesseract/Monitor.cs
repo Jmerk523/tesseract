@@ -110,7 +110,7 @@ namespace Tesseract
             // We could retrieve the original value and call it back here, but there's currently no point to doing so
 
             progressEvent?.Invoke(this, new MonitorProgressEventArgs(left, right, top, bottom, GetProgress()));
-            return true;
+            return false;
         }
 
         private bool OnCancelCheck(IntPtr cancel_this, int words)
